@@ -6,6 +6,7 @@ import {
   MantineProvider,
   ColorScheme,
 } from "@mantine/core";
+import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { RecoilRoot } from "recoil";
 
 import { HeaderSearch } from "../components/HeaderSeach";
@@ -13,9 +14,16 @@ import { HeaderSearch } from "../components/HeaderSeach";
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
 
-  const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+    key: "echo-color-scheme",
+    defaultValue: "dark",
+    getInitialValueInEffect: true,
+  });
+
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
+  useHotkeys([['mod+J', () => toggleColorScheme()]]);
 
   const testLinks = [
     {
